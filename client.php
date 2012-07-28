@@ -34,7 +34,7 @@ function sendPost($paramsStr)
   return $data;
 }
 
-$paramsStr = "userid=777&productid=555&price=222&description=allright&answerType=json&qwe=qwe";
+$paramsStr = "userid=777&productid=555&price=222&description=allright&answerType=json";
 //$post = sendPost($paramsStr);
 $result = sendGet($paramsStr);
 echo $result;

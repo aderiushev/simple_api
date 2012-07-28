@@ -26,12 +26,16 @@ class api
     /** getting get/post array of params adn processing it */
     public function __construct($params)
     {
-        print_r($this->required);
         foreach ($params as $pkey => $pvalue)
         {
-            if(!array_key_exists($pkey, $this->required) && !array_key_exists($pkey, $this->optional))
+            /** cheking on external params */
+            if (!array_key_exists($pkey, $this->required) && !array_key_exists($pkey, $this->optional))
                 $this->error("wrong_param", $pkey);
         }
+        /** checking on all required params are in */
+        $required_params = array_diff(array_keys($this->required), array_keys($params));
+        if (count($required_params) > 0)
+            $this->error("required_param", $required_params[0]);
     }
 
     /** Method of processing errors */
@@ -41,6 +45,9 @@ class api
         {
             case "wrong_param":
                 exit($this->sendMsg("Error", "wrong parameter comes: $param"));
+                break;
+            case "required_param":
+                exit($this->sendMsg("Error", "Parameter: $param is required"));
                 break;
         }
     }
