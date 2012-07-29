@@ -1,6 +1,7 @@
 <?php
-
-/** server-side Api processor */
+/** server-side Api processor
+ * parameters comes from client.php with GET or POST
+*/
 switch ($_SERVER["REQUEST_METHOD"])
 {
     case "POST":
@@ -10,6 +11,11 @@ switch ($_SERVER["REQUEST_METHOD"])
     case "GET":
         $api = new api($_GET);
         break;
+}
+
+function __autoload($class)
+{
+    require_once($class.".class.php");
 }
 
 class api
@@ -23,6 +29,7 @@ class api
         "description" => "",
         "answerType" => "json",
         "redirect" => "");
+
     /** getting get/post array of params adn processing it */
     public function __construct($params)
     {
@@ -36,6 +43,10 @@ class api
         $required_params = array_diff(array_keys($this->required), array_keys($params));
         if (count($required_params) > 0)
             $this->error("required_param", $required_params[0]);
+        
+        /** Here may be another validation rules */
+        /** When all of them passed successfully - creating and object-responser witch will be an array of fetching data */
+      //  $responser = new response($params);
     }
 
     /** Method of processing errors */
@@ -48,6 +59,9 @@ class api
                 break;
             case "required_param":
                 exit($this->sendMsg("Error", "Parameter: $param is required"));
+                break;
+            case "wrong_param_type":
+                exit($this->sendMsg("Error", "Parameter: $param[0] has wrong type. Should be $param[1]"));
                 break;
         }
     }
