@@ -1,24 +1,25 @@
 <?php
+
 /** server-side Api processor
  * parameters comes from client.php with GET or POST
-*/
+ */
 switch ($_SERVER["REQUEST_METHOD"])
 {
     case "POST":
-        $api = new api($_POST);
+        $api = new Api($_POST);
         break;
 
     case "GET":
-        $api = new api($_GET);
+        $api = new Api($_GET);
         break;
 }
 
 function __autoload($class)
 {
-    require_once($class.".class.php");
+    require_once ($class . ".class.php");
 }
 
-class api
+class Api
 {
     /** I think it's the most flexible variant to differ income params into 2 arrays */
     private $required = array(
@@ -26,27 +27,41 @@ class api
         "productid" => null,
         "price" => null);
     private $optional = array(
-        "description" => "",
+        "description" => "no description",
         "answerType" => "json",
         "redirect" => "");
+    private $income_params;
 
     /** getting get/post array of params adn processing it */
     public function __construct($params)
     {
+        $this->income_params = $params;
+        $external_params = array();
         foreach ($params as $pkey => $pvalue)
         {
             /** cheking on external params */
             if (!array_key_exists($pkey, $this->required) && !array_key_exists($pkey, $this->optional))
-                $this->error("wrong_param", $pkey);
+                array_push($external_params, $pkey);
         }
-        /** checking on all required params are in */
-        $required_params = array_diff(array_keys($this->required), array_keys($params));
-        if (count($required_params) > 0)
-            $this->error("required_param", $required_params[0]);
+        if (count($external_params) > 0)
+        {
+            $external_params_str = implode($external_params, ", ");
+            $this->error("wrong_param", $external_params_str);
+        }
         
+        /** checking on all required params are in */
+        $required_params = array_diff(array_keys($this->required), array_keys($this->income_params));
+        if (count($required_params) > 0)
+        {
+            $required_params_str = implode($required_params, ", ");
+            $this->error("required_param", $required_params_str);
+        }
+
         /** Here may be another validation rules */
         /** When all of them passed successfully - creating and object-responser witch will be an array of fetching data */
-      //  $responser = new response($params);
+        $responser = new Response();
+        $resp = $responser->getData($this->income_params);
+        echo $this->sendMsg("Success", "Parameters are OK", $resp);
     }
 
     /** Method of processing errors */
@@ -55,28 +70,34 @@ class api
         switch ($kind)
         {
             case "wrong_param":
-                exit($this->sendMsg("Error", "wrong parameter comes: $param"));
+                exit($this->sendMsg("Error", "wrong parameter(s) comes: $param",
+                    "Try again with correct parameters"));
                 break;
             case "required_param":
-                exit($this->sendMsg("Error", "Parameter: $param is required"));
-                break;
-            case "wrong_param_type":
-                exit($this->sendMsg("Error", "Parameter: $param[0] has wrong type. Should be $param[1]"));
+                exit($this->sendMsg("Error", "Parameter(s): $param is required",
+                    "Try again with correct parameters"));
                 break;
         }
     }
 
     /** Sending Message in case of type of answerType */
-    private function sendMsg($type, $text = "")
+    private function sendMsg($type, $text = "", $answer = "")
     {
-        switch ($this->optional["answerType"])
+        switch ($this->income_params["answerType"])
         {
             case "json":
-                return $this->getJson(array("Type" => $type, "Text" => $text));
+                return $this->getJson(array(
+                    "Type" => $type,
+                    "Text" => $text,
+                    "Answer" => $answer));
                 break;
 
             case "xml":
-                $this->getXml($text);
+                return $this->getXml(array(
+                    "Type" => $type,
+                    "Message" => $text,
+                    "Answer" => $answer));
+                break;
         }
     }
 
@@ -84,5 +105,13 @@ class api
     private function getJson($data)
     {
         return json_encode($data);
+    }
+
+    /** Getting result in XML */
+    private function getXml($data)
+    {
+        header('Content-type: application/xml');
+        $converter = new Array2XML();
+        return $converter->convert($data);
     }
 }

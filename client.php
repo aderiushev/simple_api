@@ -10,7 +10,7 @@
 function sendGet($paramsStr)
 {
   $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, "http://hudziamasuki.com/testapi/api/api.php?$paramsStr");
+  curl_setopt($ch, CURLOPT_URL, "http://hudziamasuki.com/testapi/api/Api.php?$paramsStr");
   curl_setopt($ch, CURLOPT_HEADER, false);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
@@ -23,7 +23,7 @@ function sendGet($paramsStr)
 function sendPost($paramsStr)
 {
   $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, "http://hudziamasuki.com/testapi/api/api.php");
+  curl_setopt($ch, CURLOPT_URL, "http://hudziamasuki.com/testapi/Api/api.php");
   curl_setopt($ch, CURLOPT_HEADER, false);
   curl_setopt($ch, CURLOPT_POST, true);
   curl_setopt($ch, CURLOPT_POSTFIELDS, "$paramsStr");
@@ -34,7 +34,7 @@ function sendPost($paramsStr)
   return $data;
 }
 
-$paramsStr = "userid=777&productid=asd&price=222&description=allright&answerType=json";
+$paramsStr = "userid=777&productid=asd&price=222&description=allright&answerType=xml";
 //$post = sendPost($paramsStr);
 $result = sendGet($paramsStr);
 echo $result;
