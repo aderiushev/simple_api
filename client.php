@@ -1,9 +1,9 @@
 <?php
 /**
  * client-side. Sending POST or GET via curl
- * doesnt matter how to send req.
- * pay more attention to api.php
- * Sending 5 params: userid, productid, price, description, answerType, redirect
+ * doesnt matter how to send request
+ * more attention should be paid to api.php
+ * Sending 6 params: userid, productid, price, description, answerType, redirect
  * redirct description and answerType are optional. 
 */
 
@@ -34,7 +34,7 @@ function sendPost($paramsStr)
   return $data;
 }
 
-$paramsStr = "userid=777&productid=555&price=222&description=allright&answerType=json";
+$paramsStr = "userid=777&productid=asd&price=222&description=allright&answerType=json";
 //$post = sendPost($paramsStr);
 $result = sendGet($paramsStr);
 echo $result;
