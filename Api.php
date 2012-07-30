@@ -83,7 +83,8 @@ class Api
     /** Sending Message in case of type of answerType */
     private function sendMsg($type, $text = "", $answer = "")
     {
-        $at = (!$this->income_params["answerType"] ? $this->optional["answerType"]);
+        $at = (!$this->income_params["answerType"] ? $this->optional["answerType"] : $this->income_params["answerType"]);    
+        
         switch ($at)
         {
             case "json":
