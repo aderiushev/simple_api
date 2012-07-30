@@ -30,7 +30,7 @@ class Api
         "description" => "no description",
         "answerType" => "json",
         "redirect" => "");
-    private $income_params;
+    private $income_params = array();
 
     /** getting get/post array of params adn processing it */
     public function __construct($params)
@@ -54,14 +54,14 @@ class Api
         if (count($required_params) > 0)
         {
             $required_params_str = implode($required_params, ", ");
-            $this->error("required_param", $required_params_str);
+            exit($this->error("required_param", $required_params_str));
         }
 
         /** Here may be another validation rules */
         /** When all of them passed successfully - creating and object-responser witch will be an array of fetching data */
         $responser = new Response();
         $resp = $responser->getData($this->income_params);
-        echo $this->sendMsg("Success", "Parameters are OK", $resp);
+        exit($this->sendMsg("Success", "Parameters are OK", $resp));
     }
 
     /** Method of processing errors */
