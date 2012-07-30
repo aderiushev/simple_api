@@ -1,7 +1,7 @@
 <?php
 
 /** server-side Api processor
- * parameters comes from client.php with GET or POST
+ *  Expect parameters comes with GET or POST
  */
 switch ($_SERVER["REQUEST_METHOD"])
 {
@@ -26,21 +26,27 @@ class Api
         "userid" => null,
         "productid" => null,
         "price" => null);
+
     private $optional = array(
         "description" => "no description",
         "answerType" => "json",
         "redirect" => "");
+
     private $income_params = array();
 
     /** getting get/post array of params adn processing it */
     public function __construct($params)
     {
         $this->income_params = $params;
+
         $external_params = array();
+        $required_params = array();
+
         foreach ($params as $pkey => $pvalue)
         {
             /** cheking on external params */
-            if (!array_key_exists($pkey, $this->required) && !array_key_exists($pkey, $this->optional))
+            if (!array_key_exists($pkey, $this->required) && !array_key_exists($pkey, $this->
+                optional))
                 array_push($external_params, $pkey);
         }
         if (count($external_params) > 0)
@@ -48,9 +54,10 @@ class Api
             $external_params_str = implode($external_params, ", ");
             $this->error("wrong_param", $external_params_str);
         }
-        
+
         /** checking on all required params are in */
-        $required_params = array_diff(array_keys($this->required), array_keys($this->income_params));
+        $required_params = array_diff(array_keys($this->required), array_keys($this->
+            income_params));
         if (count($required_params) > 0)
         {
             $required_params_str = implode($required_params, ", ");
@@ -83,8 +90,9 @@ class Api
     /** Sending Message in case of type of answerType */
     private function sendMsg($type, $text = "", $answer = "")
     {
-        $at = $this->income_params["answerType"] ? $this->income_params["answerType"] : $this->optional["answerType"];    
-        
+        $at = $this->income_params["answerType"] ? $this->income_params["answerType"] :
+            $this->optional["answerType"];
+
         switch ($at)
         {
             case "json":
