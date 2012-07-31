@@ -6,27 +6,44 @@
 switch ($_SERVER["REQUEST_METHOD"])
 {
     case "POST":
-        $incoming = $_POST
+        $incoming = $_POST;
         break;
 
     case "GET":
-        $incoming = $_POST
+        $incoming = $_GET;
         break;
 }
 
-$api = new Api($incoming);
+$api = new Api();
 
-if (empty($incoming) || !is_array($incoming) || !isset($incoming))
-    exit($api::sendMsg("Error", "Failure income parameters", "I dont know what should you do.."));
-        
-$IsValid = $api->getValidState();
-
-if ($isValid)
+$validStatus = unserialize($api->getValidState($incoming));
+switch ($validStatus["Code"])
 {
-    $responser = new Response();
-    $resp = $responser->getData($responser);
-    exit($api::sendMsg("Success", "Parameters are OK", $resp));
+    case 0:
+        $response = $api->sendMsg($validStatus["Status"], "Params not set or empty",
+            "Please, try again");
+        echo $response;
+        break;
+
+    case 1:
+        $response = $api->sendMsg($validStatus["Status"], "External params: " . $validStatus["Data"],
+            "Please, try again");
+        echo $response;
+        break;
+
+    case 2:
+        $response = $api->sendMsg($validStatus["Status"],
+            "Required parameters should be set: " . $validStatus["Data"],
+            "Please, try again");
+        echo $response;
+        break;
+
+    case 3:
+        $response = $api->sendMsg($validStatus["Status"], "Congratulation. Ty For using our service!", $validStatus["Data"]);
+        echo $response;
+        break;
 }
+
 
 function __autoload($class)
 {
@@ -46,76 +63,73 @@ class Api
         "answerType" => "json",
         "redirect" => "");
 
-    private $_income_params = array();
+    private static $_income_params = array();
 
-    /** getting get/post array of params adn processing it */
-    public function __construct($params)
+    public static $status;
+
+    public function getValidState($params)
     {
-        return $this->_income_params = $params; 
-    }
-    
-    public function getValidState()
-    {
+        if (!is_array($params) || empty($params) || !isset($params))
+            return self::$status = serialize(array("Status" => "Error", "Code" => 0));
+        else
+            $this->_income_params = $params;
+
         $external_params = array();
         $required_params = array();
 
-        foreach ($params as $pkey => $pvalue)
+        foreach ($this->_income_params as $pkey => $pvalue)
         {
             /** cheking on external params */
-            if (!array_key_exists($pkey, $this->_required) && !array_key_exists($pkey, $this->_optional))
+            if (!array_key_exists($pkey, $this->_required) && !array_key_exists($pkey, $this->
+                _optional))
                 array_push($external_params, $pkey);
         }
         if (count($external_params) > 0)
         {
             $external_params_str = implode($external_params, ", ");
-            exit($this->error("wrong_param", $external_params_str));
+            return self::$status = serialize(array(
+                "Status" => "Error",
+                "Code" => 1,
+                "Data" => $external_params_str));
         }
 
         /** checking on all required params are in */
-        $required_params = array_diff(array_keys($this->_required), array_keys($this->_income_params));
+        $required_params = array_diff(array_keys($this->_required), array_keys($this->
+            _income_params));
         if (count($required_params) > 0)
         {
             $required_params_str = implode($required_params, ", ");
-            exit($this->error("required_param", $required_params_str));
+            return self::$status = serialize(array(
+                "Status" => "Error",
+                "Code" => 2,
+                "Data" => $required_params_str));
         }
-        return true;
-    }
 
-    /** Method of processing errors */
-    private function error($kind, $param = "")
-    {
-        switch ($kind)
-        {
-            case "wrong_param":
-                exit(self::sendMsg("Error", "wrong parameter(s) comes: $param",
-                    "Try again with correct parameters"));
-                break;
-            case "required_param":
-                exit(self::sendMsg("Error", "Parameter(s): $param is required",
-                    "Try again with correct parameters"));
-                break;
-        }
+        return self::$status = serialize(array(
+            "Status" => "Success",
+            "Code" => 3,
+            "Data" => $this->_income_params));
     }
 
     /** Sending Message in case of type of answerType */
-    public static function sendMsg($type, $text = "", $answer = "")
+    public function sendMsg($type, $text = "", $answer = "")
     {
-         //   $at = $this->_income_params["answerType"] ? $this->_income_params["answerType"] : $this->_optional["answerType"];
-$at = "json";
+        $convertable = array(
+            "Type" => $type,
+            "Text" => $text,
+            "Answer" => $answer);
+        
+        $at = $this->_income_params["answerType"] ? $this->_income_params["answerType"] :
+            $this->_optional["answerType"];
+            
         switch ($at)
         {
             case "json":
-                return $this->getJson(array(
-                    "Type" => $type,
-                    "Text" => $text,
-                    "Answer" => $answer));
+                return $this->getJson($convertable);
                 break;
 
             case "xml":
-                return $this->getXml(array(
-                    "Type" => $type,
-                    "Message" => $text,
-                    "Answer" => $answer));
+                return $this->getXml($convertable);
                 break;
         }
     }
