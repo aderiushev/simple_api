@@ -121,7 +121,7 @@ class Api
         
      //   $at = $this->_income_params["answerType"] ? $this->_income_params["answerType"] :
      //       $this->_optional["answerType"];
-            
+            $at = "xml";
         switch ($at)
         {
             case "json":
