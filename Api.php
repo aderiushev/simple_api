@@ -119,8 +119,8 @@ class Api
             "Text" => $text,
             "Answer" => $answer);
         
-        $at = $this->_income_params["answerType"] ? $this->_income_params["answerType"] :
-            $this->_optional["answerType"];
+     //   $at = $this->_income_params["answerType"] ? $this->_income_params["answerType"] :
+     //       $this->_optional["answerType"];
             
         switch ($at)
         {
