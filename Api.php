@@ -16,14 +16,16 @@ switch ($_SERVER["REQUEST_METHOD"])
 
 $api = new Api($incoming);
 
-if (empty($incoming) || !is_array($incoming) || !isset($incoming))
-    exit($api::sendMsg("Error", "Failure income parameters", "I dont know what should you do.."));
-        
-$api->getValidState();
 
-$responser = new Response();
-$resp = $responser->getData($responser);
-exit($api::sendMsg("Success", "Parameters are OK", $resp));
+        
+$IsValid = $api->getValidState();
+
+if ($isValid)
+{
+    $responser = new Response();
+    $resp = $responser->getData($responser);
+    exit($api::sendMsg("Success", "Parameters are OK", $resp));
+}
 
 function __autoload($class)
 {
