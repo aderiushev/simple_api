@@ -14,7 +14,7 @@ switch ($_SERVER["REQUEST_METHOD"])
         break;
 }
 
-if (empty($incoming) || !is_array($incoming))
+if (empty($incoming) || !is_array($incoming) || !isset($incoming))
     exit($api::sendMsg("Error", "Failure income parameters", "I dont know what should you do.."));
         
 $api = new Api($incoming);
