@@ -92,7 +92,6 @@ class Api
                 "Data" => $external_params_str));
         }
 
-        /** checking on all required params are in */
         $required_params = array_diff(array_keys($this->_required), array_keys($this->
             _income_params));
         if (count($required_params) > 0)
