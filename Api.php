@@ -79,7 +79,6 @@ class Api
 
         foreach ($this->_income_params as $pkey => $pvalue)
         {
-            /** cheking on external params */
             if (!array_key_exists($pkey, $this->_required) && !array_key_exists($pkey, $this->
                 _optional))
                 array_push($external_params, $pkey);
