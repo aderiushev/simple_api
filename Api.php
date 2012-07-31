@@ -16,7 +16,8 @@ switch ($_SERVER["REQUEST_METHOD"])
 
 $api = new Api($incoming);
 
-
+if (empty($incoming) || !is_array($incoming) || !isset($incoming))
+    exit($api::sendMsg("Error", "Failure income parameters", "I dont know what should you do.."));
         
 $IsValid = $api->getValidState();
 
