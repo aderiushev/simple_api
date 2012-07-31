@@ -109,7 +109,6 @@ class Api
             "Data" => $this->_income_params));
     }
 
-    /** Sending Message in case of type of answerType */
     public function sendMsg($type, $text = "", $answer = "")
     {
         $convertable = array(
