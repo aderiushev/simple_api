@@ -14,10 +14,11 @@ switch ($_SERVER["REQUEST_METHOD"])
         break;
 }
 
+$api = new Api($incoming);
+
 if (empty($incoming) || !is_array($incoming) || !isset($incoming))
     exit($api::sendMsg("Error", "Failure income parameters", "I dont know what should you do.."));
         
-$api = new Api($incoming);
 $api->getValidState();
 
 $responser = new Response();
@@ -47,8 +48,7 @@ class Api
     /** getting get/post array of params adn processing it */
     public function __construct($params)
     {
-        return $this->_income_params = $params;   
-        
+        return $this->_income_params = $params; 
     }
     
     public function getValidState()
@@ -97,9 +97,6 @@ class Api
     /** Sending Message in case of type of answerType */
     public static function sendMsg($type, $text = "", $answer = "")
     {
-        if (!isset($this->_income_params) || !is_array($this->_income_params) || empty($this->_income_params))
-            $at = "json";
-        else
             $at = $this->_income_params["answerType"] ? $this->_income_params["answerType"] : $this->_optional["answerType"];
 
         switch ($at)
