@@ -97,8 +97,10 @@ class Api
     /** Sending Message in case of type of answerType */
     public static function sendMsg($type, $text = "", $answer = "")
     {
-        $at = isset($this->_income_params["answerType"]) ? $this->_income_params["answerType"] :
-            $this->_optional["answerType"];
+        if (!isset($this->_income_params) || !is_array($this->_income_params) || empty($this->_income_params))
+            $at = "json";
+        else
+            $at = $this->_income_params["answerType"] ? $this->_income_params["answerType"] : $this->_optional["answerType"];
 
         switch ($at)
         {
