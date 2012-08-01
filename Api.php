@@ -16,7 +16,9 @@ switch ($_SERVER["REQUEST_METHOD"])
 
 $api = new Api();
 
+/** returns an array of [Status, Code, Data] of validation */
 $validStatus = unserialize($api->getValidState($incoming));
+/** processing the code of validation */
 switch ($validStatus["Code"])
 {
     case 0:
@@ -44,12 +46,13 @@ switch ($validStatus["Code"])
         break;
 }
 
+////////////////////////////
 
 function __autoload($class)
 {
     require_once ($class . ".class.php");
 }
-
+/** base class of our api */
 class Api
 {
     /** I think it's the most flexible variant to differ income params into 2 arrays */
@@ -67,8 +70,10 @@ class Api
 
     public static $status;
 
+    /** Here you can add your validation Rules */
     public function getValidState($params)
     {
+        /** first check. On correct coming parameters */
         if (!is_array($params) || empty($params) || !isset($params))
             return self::$status = serialize(array("Status" => "Error", "Code" => 0));
         else
@@ -76,13 +81,14 @@ class Api
 
         $external_params = array();
         $required_params = array();
-
+        /** second check. If comes unexpected parameter. */
         foreach ($this->_income_params as $pkey => $pvalue)
         {
             if (!array_key_exists($pkey, $this->_required) && !array_key_exists($pkey, $this->
                 _optional))
                 array_push($external_params, $pkey);
         }
+        /** Getting the list of external params */
         if (count($external_params) > 0)
         {
             $external_params_str = implode($external_params, ", ");
@@ -91,9 +97,10 @@ class Api
                 "Code" => 1,
                 "Data" => $external_params_str));
         }
-
+        /** third check. On requireness. All the parameters in required array shoulld be set */
         $required_params = array_diff(array_keys($this->_required), array_keys($this->
             _income_params));
+        /** getting the list of unseted params */ 
         if (count($required_params) > 0)
         {
             $required_params_str = implode($required_params, ", ");
@@ -102,13 +109,13 @@ class Api
                 "Code" => 2,
                 "Data" => $required_params_str));
         }
-
+        /** If all the levels passed, sending success one with the now correct params */
         return self::$status = serialize(array(
             "Status" => "Success",
             "Code" => 3,
             "Data" => $this->_income_params));
     }
-
+    /** function of preparing and sending message */
     public function sendMsg($type, $text = "", $answer = "")
     {
         $convertable = array(
@@ -118,7 +125,7 @@ class Api
         
         $at = $this->_income_params["answerType"] ? $this->_income_params["answerType"] :
             $this->_optional["answerType"];
-            $at = "xml";
+
         switch ($at)
         {
             case "json":
