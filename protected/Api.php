@@ -80,6 +80,32 @@ class Api
             }
         }
         /////////////////////////////////////////////////////
+        /** fourth check. Dependencies between parameters */
+       if ($this->_validation_rules["check_dependencies"] && !empty($this->_validation_rules["dependencies"]))
+       {
+           $dependence_params = array();
+            foreach($this->_validation_rules["dependencies"] as $dep_key=>$dep_val)
+            {
+                if (array_key_exists($dep_key, $this->_income_params))
+                     $dependence_params = array_diff($dep_val, array_keys($this->_income_params));
+            
+                if (count($dependence_params) > 0)
+                {
+                    $dependence_params_str = implode($dependence_params, ", ");
+                    return serialize(array(
+                        "Status" => "Error",
+                        "Code" => 605,
+                        "Data" => $dependence_params_str,
+                        "OtherInfo"=>$dep_key ));
+                }
+            
+            
+            }
+           
+          
+       }
+       
+       /////////////////////////////////////////////////////
         /** If all the levels passed, sending success one with the now correct params */
 
         return serialize(array(
