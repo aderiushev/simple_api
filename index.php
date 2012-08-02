@@ -43,7 +43,7 @@ require_once ("protected/Api.php");
 $api = new Api($settings);
 
 /** returns an array of [Status, Code, Data] of validation */
-$validStatus = unserialize($api->getValidState($incoming));
+$validStatus = $api->getValidState($incoming);
 /** processing the code of validation */
 
 switch ($validStatus["Code"])

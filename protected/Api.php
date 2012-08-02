@@ -37,7 +37,7 @@ class Api
         if ($this->_validation_rules["check_incomeIsNotEmptyArray"])
         {
             if (!is_array($params) || empty($params) || !isset($params))
-                return serialize(array("Status" => "Error", "Code" => 600));
+                return array("Status" => "Error", "Code" => 600);
         }
         
         if ($this->_validation_rules["check_emptyParams"])
@@ -52,10 +52,10 @@ class Api
             if (count($empty_params) > 0)
             {
                 $empty_params_str = implode($empty_params, ", ");
-                return serialize(array(
+                return array(
                     "Status" => "Error",
                     "Code" => 605,
-                    "Data" => $empty_params_str));
+                    "Data" => $empty_params_str);
             }
         }
 
@@ -75,10 +75,10 @@ class Api
             if (count($external_params) > 0)
             {
                 $external_params_str = implode($external_params, ", ");
-                return serialize(array(
+                return array(
                     "Status" => "Error",
                     "Code" => 602,
-                    "Data" => $external_params_str));
+                    "Data" => $external_params_str);
             }
         }
         /////////////////////////////////////////////////////
@@ -92,10 +92,10 @@ class Api
             if (count($required_params) > 0)
             {
                 $required_params_str = implode($required_params, ", ");
-                return serialize(array(
+                return array(
                     "Status" => "Error",
                     "Code" => 601,
-                    "Data" => $required_params_str));
+                    "Data" => $required_params_str);
             }
         }
         /////////////////////////////////////////////////////
@@ -111,11 +111,11 @@ class Api
                 if (count($dependence_params) > 0)
                 {
                     $dependence_params_str = implode($dependence_params, ", ");
-                    return serialize(array(
+                    return array(
                         "Status" => "Error",
                         "Code" => 604,
                         "Data" => $dependence_params_str,
-                        "OtherInfo"=>$dep_key ));
+                        "OtherInfo"=>$dep_key );
                 }
             
             
