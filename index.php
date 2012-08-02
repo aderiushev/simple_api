@@ -8,11 +8,20 @@ $settings = array(
     "optional" => array(
         "description" => "no description",
         "answerType" => "json",
+        "another_param"=>"value",
+        "another_param2"=>"value2",
+        "another_param3"=>"value3",
+        "another_param4"=>"value4")
         ),
     "validation_rules" => array(
         "check_income" => true,
         "check_external" => true,
-        "check_required" => true));
+        "check_required" => true),
+    "dependencies"=>array(
+        "another_param"=>"another_param2",
+        "another_param2"=>array("another_param3", "another_param4"),
+        "another_param3"=>array("another_param")
+        );
 
 switch ($_SERVER["REQUEST_METHOD"])
 {
@@ -42,7 +51,7 @@ switch ($validStatus["Code"])
         break;
 
     case 602:
-        $response = $api->sendMsg($validStatus["Status"], "External params: " . $validStatus["Data"],
+        $response = $api->sendMsg($validStatus["Status"], "Unnecessary params: " . $validStatus["Data"],
             "Please, try again");
         echo $response;
         break;
