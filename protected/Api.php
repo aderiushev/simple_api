@@ -94,7 +94,7 @@ class Api
                     $dependence_params_str = implode($dependence_params, ", ");
                     return serialize(array(
                         "Status" => "Error",
-                        "Code" => 605,
+                        "Code" => 604,
                         "Data" => $dependence_params_str,
                         "OtherInfo"=>$dep_key ));
                 }
