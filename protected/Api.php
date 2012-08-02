@@ -60,7 +60,7 @@ class Api
 
         $this->_income_params = $params;
         /////////////////////////////////////////////////////
-        if ($this->_validation_rules["check_external"])
+        if ($this->_validation_rules["check_unnecesarryParams"])
         {
             /** second check. If comes unexpected parameter. */
             $external_params = array();
@@ -82,7 +82,7 @@ class Api
             }
         }
         /////////////////////////////////////////////////////
-        if ($this->_validation_rules["check_required"])
+        if ($this->_validation_rules["check_requiredParams"])
         {
             /** third check. On requireness. All the parameters in required array shoulld be set */
             $required_params = array();
@@ -100,7 +100,7 @@ class Api
         }
         /////////////////////////////////////////////////////
         /** fourth check. Dependencies between parameters */
-       if ($this->_validation_rules["check_dependencies"] && !empty($this->_validation_rules["dependencies"]))
+       if ($this->_validation_rules["check_dependenciesParams"] && !empty($this->_validation_rules["dependencies"]))
        {
            $dependence_params = array();
             foreach($this->_validation_rules["dependencies"] as $dep_key=>$dep_val)
