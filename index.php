@@ -16,7 +16,7 @@ $settings = array(
     ),
     "validation_rules" => array(
         "check_incomeIsNotEmptyArray" => true,
-        "checkEmptyParams"=>true,
+        "check_emptyParams"=>true,
         "check_unnecesarryParams" => true,
         "check_requiredParams" => true,
         "check_dependenciesParams"=>true,

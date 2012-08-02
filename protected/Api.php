@@ -31,6 +31,7 @@ class Api
     /** Here you can add your validation Rules */
     public function getValidState($params)
     {
+        $this->_income_params = $params;
         /////////////////////////////////////////////////////
         /** first check. On correct coming parameters */
         if ($this->_validation_rules["check_incomeIsNotEmptyArray"])
@@ -39,13 +40,13 @@ class Api
                 return serialize(array("Status" => "Error", "Code" => 600));
         }
         
-        if ($this->_validation_rules["checkEmptyParams"])
+        if ($this->_validation_rules["check_emptyParams"])
         {
             $empty_params = array();
             foreach ($this->_income_params as $key=>$val)
             {
-                if ($val == "")
-                    array_push($empty_params, $val);
+                if (empty($val))
+                    array_push($empty_params, $key);
             }
             
             if (count($empty_params) > 0)
@@ -58,7 +59,6 @@ class Api
             }
         }
 
-        $this->_income_params = $params;
         /////////////////////////////////////////////////////
         if ($this->_validation_rules["check_unnecesarryParams"])
         {
