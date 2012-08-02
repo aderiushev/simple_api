@@ -33,10 +33,29 @@ class Api
     {
         /////////////////////////////////////////////////////
         /** first check. On correct coming parameters */
-        if ($this->_validation_rules["check_income"])
+        if ($this->_validation_rules["check_incomeIsNotEmptyArray"])
         {
             if (!is_array($params) || empty($params) || !isset($params))
                 return serialize(array("Status" => "Error", "Code" => 600));
+        }
+        
+        if ($this->_validation_rules["checkEmptyParams")
+        {
+            $empty_params = array();
+            foreach ($this->_income_params as $key=>$val)
+            {
+                if ($val == "")
+                    array_push($empty_params, $val);
+            }
+            
+            if (count($empty_params) > 0)
+            {
+                $empty_params_str = implode($empty_params, ", ");
+                return serialize(array(
+                    "Status" => "Error",
+                    "Code" => 605,
+                    "Data" => $empty_params_str));
+            }
         }
 
         $this->_income_params = $params;
