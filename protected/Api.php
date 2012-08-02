@@ -39,7 +39,7 @@ class Api
                 return serialize(array("Status" => "Error", "Code" => 600));
         }
         
-        if ($this->_validation_rules["checkEmptyParams")
+        if ($this->_validation_rules["checkEmptyParams"])
         {
             $empty_params = array();
             foreach ($this->_income_params as $key=>$val)
