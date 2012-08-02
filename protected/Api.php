@@ -26,7 +26,6 @@ class Api
         $this->_required = $settings["required"];
         $this->_optional = $settings["optional"];
         $this->_validation_rules = $settings["validation_rules"];
-        $this->_types = $settings["types"];
     }
 
     /** Here you can add your validation Rules */
