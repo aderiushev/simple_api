@@ -71,6 +71,11 @@ switch ($validStatus["Code"])
             "Congratulation. Ty For using our service!", $validStatus["Data"]);
         echo $response;
         break;
+    case 604:
+        $response = $api->sendMsg($validStatus["Status"], "Dependence Error",
+            "You requested parameter: ".$validStatus["OtherInfo"]." but it need to set with it params: ". $validStatus["Data"]);
+        echo $response;
+        break;
     
     default:
         $response = $api->sendMsg("Notice", "I cant stand you..",
