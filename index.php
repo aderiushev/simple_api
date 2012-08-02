@@ -18,6 +18,7 @@ $settings = array(
         "check_income" => true,
         "check_external" => true,
         "check_required" => true,
+        "check_dependencies"=>true,
         "dependencies"=>array(
             "another_param"=>"another_param2",
             "another_param2"=>array("another_param3", "another_param4"),
