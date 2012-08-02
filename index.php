@@ -15,10 +15,11 @@ $settings = array(
         "another_param4"=>"value4"
     ),
     "validation_rules" => array(
-        "check_income" => true,
-        "check_external" => true,
-        "check_required" => true,
-        "check_dependencies"=>true,
+        "check_incomeIsNotEmptyArray" => true,
+        "checkEmptyParams"=>true,
+        "check_unnecesarryParams" => true,
+        "check_requiredParams" => true,
+        "check_dependenciesParams"=>true,
         "dependencies"=>array(
             "another_param2"=>array("another_param3", "another_param4"),
             "another_param3"=>array("another_param")
@@ -74,6 +75,11 @@ switch ($validStatus["Code"])
     case 604:
         $response = $api->sendMsg($validStatus["Status"], "Dependence Error",
             "You requested parameter: ".$validStatus["OtherInfo"]." but it need to set with it params: ". $validStatus["Data"]);
+        echo $response;
+        break;
+    case 605:
+        $response = $api->sendMsg($validStatus["Status"], "Empty Params",
+            "This params you send are empty: ".$validStatus["Data"]);
         echo $response;
         break;
     
