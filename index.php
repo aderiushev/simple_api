@@ -16,12 +16,13 @@ $settings = array(
     "validation_rules" => array(
         "check_income" => true,
         "check_external" => true,
-        "check_required" => true),
-    "dependencies"=>array(
-        "another_param"=>"another_param2",
-        "another_param2"=>array("another_param3", "another_param4"),
-        "another_param3"=>array("another_param")
-        );
+        "check_required" => true,
+        "dependencies"=>array(
+            "another_param"=>"another_param2",
+            "another_param2"=>array("another_param3", "another_param4"),
+            "another_param3"=>array("another_param")
+        )
+    );
 
 switch ($_SERVER["REQUEST_METHOD"])
 {
