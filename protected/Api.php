@@ -127,10 +127,10 @@ class Api
        /////////////////////////////////////////////////////
         /** If all the levels passed, sending success one with the now correct params */
 
-        return serialize(array(
+        return array(
             "Status" => "Success",
             "Code" => 603,
-            "Data" => $this->_income_params));
+            "Data" => $this->_income_params);
         /////////////////////////////////////////////////////
     }
 
