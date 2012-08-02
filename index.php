@@ -4,15 +4,16 @@ $settings = array(
     "required" => array(
         "userid" => null,
         "productid" => null,
-        "price" => null),
+        "price" => null
+    ),
     "optional" => array(
         "description" => "no description",
         "answerType" => "json",
         "another_param"=>"value",
         "another_param2"=>"value2",
         "another_param3"=>"value3",
-        "another_param4"=>"value4")
-        ),
+        "another_param4"=>"value4"
+    ),
     "validation_rules" => array(
         "check_income" => true,
         "check_external" => true,
@@ -22,7 +23,8 @@ $settings = array(
             "another_param2"=>array("another_param3", "another_param4"),
             "another_param3"=>array("another_param")
         )
-    );
+    )
+);
 
 switch ($_SERVER["REQUEST_METHOD"])
 {
